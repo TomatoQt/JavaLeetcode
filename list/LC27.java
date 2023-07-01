@@ -3,17 +3,16 @@ package list;
 // 移除数组内元素
 public class LC27 {
     public static int removeElement(int[] nums, int val) {
-        int left = 0, right = left;
+        int slowIndex = 0;
 
-        while (right < nums.length) {
-            if (nums[right] != val) {
-                nums[left] = nums[right];
-                left++;
+        for (int fastIndex = 0; fastIndex < nums.length; fastIndex++) {
+            if (nums[fastIndex] != val) {
+                nums[slowIndex] = nums[fastIndex];
+                slowIndex++;
             }
-            right++;
         }
 
-        return left;
+        return slowIndex;
     }
 
     public static void main(String[] args) {

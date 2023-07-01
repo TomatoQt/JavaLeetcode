@@ -8,16 +8,16 @@ public class LC704 {
             return -1;
         }
 
-        // 定义区间范围
+        // 使用左闭右闭区间写的 [left, right]
         int left = 0, right = nums.length - 1;
         while (left <= right) {
             // 中间位置
-            int mid = left + (right -left) / 2; // 避免大数相加导致溢出
-            if(nums[mid] == target)
+            int mid = left + (right - left) / 2; // 避免大数相加导致溢出
+            if (nums[mid] == target)
                 return mid;
             else if (nums[mid] < target)
                 left = mid + 1;
-            else if (nums[mid] > target)
+            else
                 right = mid - 1;
         }
         return -1;
