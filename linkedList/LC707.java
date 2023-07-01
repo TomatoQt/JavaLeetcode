@@ -2,23 +2,27 @@ package linkedList;
 
 public class LC707 {
     class MyLinkedList {
-        int size;
-        ListNode fakeHead;
+        private int nodeNum;
+        private ListNode dummyHead;
 
         public MyLinkedList() {
-            this.size = 0;
-            fakeHead = new ListNode(0);
+            dummyHead = new ListNode();
+            nodeNum = 0;
         }
 
         public int get(int index) {
-            // index 不合法，直接返回-1
-            if (index < 0 || index >= size)
+            if (index < 0 || index >= nodeNum)
                 return -1;
-            ListNode cur = fakeHead;
-            for (int i = 0; i < index; i++) {
+
+            ListNode cur = dummyHead.next;
+            int count = 0;
+            // 只要不满足，就一直往count++的方向找
+            while (count < index) {
                 cur = cur.next;
+                count++;
             }
-            return cur.next.val;
+            // 退出while，count == index
+            return cur.val;
         }
 
         public void addAtHead(int val) {
@@ -26,43 +30,41 @@ public class LC707 {
         }
 
         public void addAtTail(int val) {
-            addAtIndex(size, val);
+            addAtIndex(nodeNum, val);
         }
 
         public void addAtIndex(int index, int val) {
-            if (index > size)
-                return;
-            else if (index == size) {
-                ListNode cur = fakeHead;
-                for (int i = 0; i < index; i++) {
+            if (index >= 0 && index <= nodeNum) { // 把index==nodeNum的情况考虑进来
+                ListNode pre = dummyHead;
+                ListNode cur = pre.next;
+                int count = 0;
+                while (count < index) {
+                    pre = cur;
                     cur = cur.next;
+                    count++;
                 }
-                cur.next = new ListNode(val);
-            } else if (index < 0) {
-                fakeHead.next = new ListNode(val, fakeHead.next);
-            } else {
-                ListNode pre = fakeHead, cur = fakeHead.next;
-                for (int i = 0; i < index; i++) {
-                    pre = pre.next;
-                    cur = cur.next;
-                }
-                pre.next = new ListNode(val, cur);
+                ListNode newNode = new ListNode(val);
+                nodeNum++;
+                pre.next = newNode;
+                newNode.next = cur;
             }
-            size++;
         }
 
         public void deleteAtIndex(int index) {
-            if (index < 0 || index >=size)
-                return;
-            else {
-                ListNode pre = fakeHead, cur = fakeHead.next;
-                for (int i = 0; i < index; i++) {
-                    pre = pre.next;
+            if (index >= 0 && index < nodeNum) { // index==nodeNum感觉越界了，就没有包括进来
+                ListNode pre = dummyHead;
+                ListNode cur = pre.next;
+                int count = 0;
+                // 只要不满足，就一直往count++的方向找
+                while (count < index) {
+                    pre = cur;
                     cur = cur.next;
+                    count++;
                 }
+                // 退出while，count == index
                 pre.next = cur.next;
+                nodeNum--;
             }
-            size--;
         }
     }
 }
