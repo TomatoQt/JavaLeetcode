@@ -2,36 +2,44 @@ package linkedList;
 
 public class LinkedListInterlink {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        if (headA == null || headB == null)
-            return null;
-        int countA = 0, countB = 0;
-        ListNode curA = headA, curB = headB;
-        while (curA != null) {
-            curA = curA.next;
-            countA++;
+        int A_count = 0, B_count = 0;
+        ListNode A_cur = headA, B_cur = headB;
+
+        while (A_cur != null) {
+            A_cur = A_cur.next;
+            A_count++;
         }
-        while (curB != null) {
-            curB = curB.next;
-            countB++;
+
+        while (B_cur != null) {
+            B_cur = B_cur.next;
+            B_count++;
         }
-        // reset
-        curA = headA;
-        curB = headB;
-        if (countA < countB) {
-            // curB jump
-            for (int i = 0; i < countB - countA; i++)
-                curB = curB.next;
-        } else if (countA > countB) {
-            // curA jump
-            for (int i = 0; i < countA - countB; i++)
-                curA = curA.next;
+
+        A_cur = headA;
+        B_cur = headB;
+
+        // 让A指向最长的链表
+        if (A_count < B_count) {
+            int temp_count = A_count;
+            A_count = B_count;
+            B_count = temp_count;
+
+            ListNode temp_node = A_cur;
+            A_cur = B_cur;
+            B_cur = temp_node;
         }
-        while (curA != null && curB != null && curA != curB) {
-            curA = curA.next;
-            curB = curB.next;
+
+        for (int i = 0; i < (A_count - B_count); i++) {
+            A_cur = A_cur.next;
         }
-        if (curA == null || curB == null)
-            return null;
-        return curA;
+
+        while (A_cur != null && B_cur != null) {
+            if (A_cur == B_cur)
+                return A_cur;
+            A_cur = A_cur.next;
+            B_cur = B_cur.next;
+        }
+
+        return null;
     }
 }

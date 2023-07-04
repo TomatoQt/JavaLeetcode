@@ -2,25 +2,20 @@ package linkedList;
 
 public class LC19 {
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        int count = 0;
-        ListNode cur = head;
-        while (cur != null) {
-            cur = cur.next;
-            count++;
+        ListNode dummyHead = new ListNode(-1, head);
+        ListNode slow = dummyHead, fast = dummyHead;
+        for (int i = 0; i < n + 1; i++) {
+            fast = fast.next;
         }
 
-        ListNode pre = null;
-        cur = head; // reset
-        for (int i = 0; i < count - n; i++) {
-            pre = cur;
-            cur = cur.next;
+        while (fast != null) {
+            slow = slow.next;
+            fast = fast.next;
         }
 
-        if (pre != null)
-            pre.next = cur.next;
-        else
-            return head.next;
+        // 结束while循环的时候，就是找到了被删除节点的上一个节点
+        slow.next = slow.next.next;
 
-        return head;
+        return dummyHead.next;
     }
 }
