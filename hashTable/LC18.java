@@ -7,31 +7,38 @@ import java.util.List;
 // 双指针
 public class LC18 {
     public List<List<Integer>> fourSum(int[] nums, int target) {
-        List<List<Integer>> res = new ArrayList<>();
-        Arrays.sort(nums);
+        Arrays.sort(nums); // 排序
+        List<List<Integer>> result = new ArrayList<>(); // 存结果
 
-        for (int i = 0; i < nums.length; i++) {
-            // 剪枝：一次循环最小的数大于target，就没有必要继续循环
-            if (nums[i] > 0 && nums[i] > target) return res;
+        // 最小的数字大于target，不能找到和为target的数
+        if (nums[0] > target)
+            return result;
+
+        for (int i = 0; i < nums.length - 3; i++) {
+            // 剪枝，访问过nums[0]之后再判重
             if (i > 0 && nums[i] == nums[i - 1]) continue;
-            // 注意：j从i+1开始，去重时j-1不能越界（即保证j>i+1）
-            for (int j = i + 1; j < nums.length; j++) {
+            for (int j = i + 1; j < nums.length - 2; j++) {
+                // 剪枝，访问过nums[i+1]之后再判重
                 if (j > i + 1 && nums[j] == nums[j - 1]) continue;
                 int left = j + 1, right = nums.length - 1;
+
                 while (left < right) {
-                    long sum = (long) nums[i] + nums[j] + nums[left] + nums[right];
+                    int sum = nums[i] + nums[j] + nums[left] + nums[right];
                     if (sum > target) right--;
                     else if (sum < target) left++;
                     else {
-                        res.add(Arrays.asList(nums[i], nums[j], nums[left], nums[right]));
+                        result.add(new ArrayList<>(Arrays.asList(nums[i], nums[j], nums[left], nums[right])));
+                        // 去重
                         while (left < right && nums[left] == nums[left + 1]) left++;
                         while (left < right && nums[right] == nums[right - 1]) right--;
+
                         right--;
                         left++;
                     }
                 }
             }
         }
-        return res;
+
+        return result;
     }
 }
