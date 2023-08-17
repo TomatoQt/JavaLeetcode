@@ -2,39 +2,39 @@ package Stack_Queue;
 
 import java.util.Stack;
 
-public class MyQueue {
-    private Stack<Integer> inStack;
-    private Stack<Integer> outStack;
+class MyQueue {
+    private Stack<Integer> stackIn;
+    private Stack<Integer> stackOut;
 
     public MyQueue() {
-        this.inStack = new Stack<>();
-        this.outStack = new Stack<>();
+        stackIn = new Stack<>();
+        stackOut = new Stack<>();
     }
 
     public void push(int x) {
-        inStack.push(x);
+        stackIn.push(x);
     }
 
     public int pop() {
-        while (!inStack.empty())
-            outStack.push(inStack.pop());
-        int res = outStack.pop();
-        while (!outStack.empty())
-            inStack.push(outStack.pop());
-        return res;
+        if (stackOut.empty()) {
+            while (!stackIn.empty())
+                stackOut.push(stackIn.pop());
+        }
+        // pop时要保证stackIn的元素全部转移完毕
+        return stackOut.pop();
     }
 
     public int peek() {
-        while (!inStack.empty())
-            outStack.push(inStack.pop());
-        int res = outStack.peek();
-        while (!outStack.empty())
-            inStack.push(outStack.pop());
-        return res;
+        if (stackOut.empty()) {
+            while (!stackIn.empty())
+                stackOut.push(stackIn.pop());
+        }
+        // peek时要保证stackIn的元素全部转移完毕
+        return stackOut.peek();
     }
 
     public boolean empty() {
-        return inStack.empty() && outStack.empty();
+        return stackIn.empty() && stackOut.empty();
     }
 }
 
