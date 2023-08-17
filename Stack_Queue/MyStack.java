@@ -4,26 +4,32 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 class MyStack {
-    Queue<Integer> queue1;
-    Queue<Integer> queue2;
+    private Queue<Integer> queue1;
+    private Queue<Integer> queue2;
 
     public MyStack() {
-        this.queue1 = new LinkedList<>();
-        this.queue2 = new LinkedList<>();
+        queue1 = new LinkedList<>();
+        queue2 = new LinkedList<>();
     }
 
     public void push(int x) {
-        queue2.offer(x);
-        while (!queue1.isEmpty())
-            queue2.offer(queue1.poll());
-        Queue<Integer>  queueTemp;
-        queueTemp = queue1;
-        queue1 = queue2;
-        queue2 = queueTemp;
+        queue1.add(x);
+        // 保证queue1仅包含最后一个元素
+        while (queue1.size() > 1)
+            queue2.add(queue1.poll());
     }
 
     public int pop() {
-        return queue1.poll();
+        int res = queue1.poll();
+        // 保证queue2仅包含最后一个元素
+        while (queue2.size() > 1)
+            queue1.add(queue2.poll());
+        // 交换queue1和queue2
+        Queue<Integer> tempQ = queue1;
+        queue1 = queue2;
+        queue2 = tempQ;
+
+        return res;
     }
 
     public int top() {
@@ -31,7 +37,7 @@ class MyStack {
     }
 
     public boolean empty() {
-        return queue1.isEmpty();
+        return queue1.isEmpty() && queue2.isEmpty();
     }
 }
 
