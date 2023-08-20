@@ -29,7 +29,7 @@ public class LC150 {
                     stack.push(op1 / op2);
                 }
                 default -> // numbers
-                        stack.push(Integer.parseInt(str));
+                    stack.push(Integer.parseInt(str));
             }
         }
         return stack.pop();
