@@ -4,41 +4,18 @@ import java.util.*;
 
 public class LC406 {
     public int[][] reconstructQueue(int[][] people) {
-        Comparator<int[]> comp = new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                if (o1[0] == o2[0]) { // 身高相同，让第二个数字小的在前
-                    return Integer.compare(o1[1], o2[1]);
-                } else
-                    return Integer.compare(o2[0], o1[0]);
-            }
-        };
+        // 身高从大到小排（身高相同k小的站前面）
+        Arrays.sort(people, (a, b) -> {
+            if (a[0] == b[0]) return a[1] - b[1];   // a - b 是升序排列，故在a[0] == b[0]的狀況下，會根據k值升序排列
+            return b[0] - a[0];   //b - a 是降序排列，在a[0] != b[0]，的狀況會根據h值降序排列
+        });
 
-        PriorityQueue<int[]> pq = new PriorityQueue<>(comp);
+        LinkedList<int[]> que = new LinkedList<>();
 
-        pq.addAll(Arrays.asList(people));
-
-        List<int[]> list = new LinkedList<>();
-
-        // 按照身高降序排列
-        while (!pq.isEmpty()) {
-            int[] item = pq.poll();
-            list.add(item);
+        for (int[] p : people) {
+            que.add(p[1],p);   //Linkedlist.add(index, value)，會將value插入到指定index裡。
         }
 
-        for (int[] item : list)
-            System.out.println(item[0] + " " + item[1]);
-
-        List<int[]> res = new LinkedList<>();
-
-        // 用list去插入res
-        for (int[] item : list)
-            res.add(item[1], item);
-
-        int[][] result = new int[res.size()][2];
-        for (int i = 0; i < res.size(); i++)
-            result[i] = res.get(i);
-
-        return result;
+        return que.toArray(new int[people.length][]);
     }
 }
